@@ -3,11 +3,14 @@ const { Book } = require('../models');
 const resolvers = {
   Query: {
     books: async () => {
-      return Book.find();
+      return await Book.find({}).populate('books').populate({
+        path: 'books',
+        populate: 'author'
+      });
     },
 
     book: async (parent, { bookId }) => {
-      return Book.findOne({ _id: bookId });
+      return await Class.find({}).populate('author');
     },
   },
 };

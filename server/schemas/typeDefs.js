@@ -4,6 +4,16 @@ const typeDefs = gql`
 type Book {
   _id: ID
   author: String
+  image: String
+  link: String
+  title: String
+}
+
+type User {
+  _id: ID
+  usernmae: String
+  email: String
+  password: String
 }
 
 type Query {
