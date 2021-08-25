@@ -4,9 +4,11 @@ const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
   Query: {
-    thisUser: async (parent, args) => {
-      return await Book.find({}).populate('savedBooks');
-    },
+    thisUser: async (parent, args, context) => {
+      if (context.user != undefined) {
+        return User.findOne({ _id: context.user._id }).populate('savedBooks');
+      }
+    }
   },
 
   Mutation: {
@@ -32,9 +34,10 @@ const resolvers = {
     },
   }
 
-  addSavedBook: async (parent, { bookInfo }) => {
-    const savedToUser = await User.findOneAndUpdate(
-      { _id: user._id },
+  addSavedBook: async (parent, { bookInfo }, context) => {
+    if (context.user != undefined) {
+      const savedToUser = await User.findOneAndUpdate(
+        { _id: context.user._id },
       {
         $addToSet: { savedBooks: bookInfo },
       },
