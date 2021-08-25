@@ -9,7 +9,9 @@ const { authMiddleware } = require('./utils/auth');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-if (resolvers) {
+//toggle to use GraphQL or REST API
+let usingApolloServer = false;
+if (usingApolloServer) {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
