@@ -18,6 +18,11 @@ type User {
   password: String
 }
 
+type Auth {
+  token: ID!
+  user: User
+}
+
 type Query {
   thisUser: User
 }
@@ -32,7 +37,8 @@ input BookInfo {
 }
 
 type Mutation  {
-  register(username: String!, email: String, password: String!): User
+  register(username: String!, email: String, password: String!): Auth
+  login(email: String!, password: String!): Auth
   addSavedBook(bookInfo: BookInfo!): User
 }
 `;

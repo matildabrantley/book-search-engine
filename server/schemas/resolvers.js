@@ -12,7 +12,14 @@ const resolvers = {
   },
 
   Mutation: {
-    register: async (parent, { username, email, password }) => {
+    register: async (parent, args) => {
+      const user = await User.create(args);
+      const token = signToken(user);
+
+      return { token, user };
+    },
+
+    login: async (parent, { username, email, password }) => {
       const user = await User.findOne({
         //find by either username or email for flexibility
         $or: [{ username: username }, { email: email }],
@@ -30,20 +37,21 @@ const resolvers = {
         throw new AuthenticationError('Wrong password!');
       }
 
-      return { signToken(user), user };
+      const token = signToken(user);
+
+      return { token, user };
     },
-  }
 
   addSavedBook: async (parent, { bookInfo }, context) => {
     if (context.user != undefined) {
-      const savedToUser = await User.findOneAndUpdate(
+      const savedToUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
-      {
-        $addToSet: { savedBooks: bookInfo },
-      },
-      { new: true, runValidators: true }
-    );
-    return savedToUser;
+        { $push: { savedBooks: bookInfo } },
+        { new: true }
+      );
+      return savedToUser;
+    }
+    throw new AuthenticationError('Must login to save book.');
   },
 
 };
