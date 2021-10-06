@@ -53,7 +53,7 @@ const resolvers = {
     }
     throw new AuthenticationError('Must login to save book.');
   },
-
+ },
 };
 
 module.exports = resolvers;
