@@ -11,8 +11,32 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+//URI for graphQL API
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+
+//Create middleware to add jwt token to each request in header
+const auth = setContext((_, { headers }) => {
+  //retrieve token in local storage (if it's there)
+  const token = localStorage.getItem('id_token');
+  // return headers to context to be read by httpLink 
+  return {
+    headers: { ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  // Initialize the client to use the auth middleware before making request to graphQL API
+  link: auth.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
 function App() {
   return (
+    <ApolloProvider client = {client}>
     <Router>
       <>
         <Navbar />
@@ -23,6 +47,7 @@ function App() {
         </Switch>
       </>
     </Router>
+    </ApolloProvider>
   );
 }
 
