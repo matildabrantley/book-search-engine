@@ -6,7 +6,8 @@ const resolvers = {
   Query: {
     thisUser: async (parent, args, context) => {
       if (context.user != undefined) {
-        return User.findOne({ _id: context.user._id }).populate('savedBooks');
+        const user = await User.findOne({ _id: context.user._id }).select('-__v -password');
+        return user;
       }
     }
   },
