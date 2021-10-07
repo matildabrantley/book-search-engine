@@ -31,12 +31,30 @@ export const ADD_BOOK = gql`
       username
       email
       savedBooks {
-        bookId
-        authors
-        image
-        description
         title
+        authors
+        description
+        bookId
         link
+        image
+      }
+    }
+  }
+`;
+
+export const REMOVE_BOOK = gql`
+  mutation removeSavedBook($bookId: ID!) {
+    removeSavedBook(bookId: $bookId) {
+      _id
+      username
+      email
+      savedBooks {
+        title
+        authors
+        description
+        bookId
+        link
+        image
       }
     }
   }
