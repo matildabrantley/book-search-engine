@@ -1,8 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import SearchBooks from './pages/SearchBooks';
-import SavedBooks from './pages/SavedBooks';
-import Navbar from './components/Navbar';
 import {
   ApolloClient,
   InMemoryCache,
@@ -11,42 +8,47 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
-//URI for graphQL API
+import SearchBooks from './pages/SearchBooks';
+import SavedBooks from './pages/SavedBooks';
+import Navbar from './components/Navbar';
+
+// Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
-//Create middleware to add jwt token to each request in header
-const auth = setContext((_, { headers }) => {
-  //retrieve token in local storage (if it's there)
+// Construct request middleware that will attach the JWT token to every request as an `authorization` header
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
   const token = localStorage.getItem('id_token');
-  // return headers to context to be read by httpLink 
+  // return the headers to the context so httpLink can read them
   return {
-    headers: { ...headers,
+    headers: {
+      ...headers,
       authorization: token ? `Bearer ${token}` : '',
     },
   };
 });
 
 const client = new ApolloClient({
-  // Initialize the client to use the auth middleware before making request to graphQL API
-  link: auth.concat(httpLink),
+  // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
 function App() {
   return (
-    <ApolloProvider client = {client}>
-    <Router>
-      <>
-        <Navbar />
-        <Switch>
-          <Route exact path='/' component={SearchBooks} />
-          <Route exact path='/saved' component={SavedBooks} />
-          <Route render={() => <h1 className='display-2'>Wrong page!</h1>} />
-        </Switch>
-      </>
-    </Router>
+    <ApolloProvider client={client}>
+      <Router>
+        <>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={SearchBooks} />
+            <Route exact path="/saved" component={SavedBooks} />
+            <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
+          </Switch>
+        </>
+      </Router>
     </ApolloProvider>
   );
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
 import { useMutation } from '@apollo/client';
-import { REGISTER } from '../utils/mutations';
+import { ADD_USER } from '../utils/mutations';
 
 import Auth from '../utils/auth';
 
@@ -18,7 +18,7 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-  const [register, { error }] = useMutation(REGISTER);
+  const [addUser, { error }] = useMutation(ADD_USER);
 
   useEffect(() => {
     if (error) {
@@ -44,11 +44,11 @@ const SignupForm = () => {
     }
 
     try {
-      const { data } = await register({
+      const { data } = await addUser({
         variables: { ...userFormData },
       });
       console.log(data);
-      Auth.login(data.register.token);
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
     }
