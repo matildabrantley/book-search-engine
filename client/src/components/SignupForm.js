@@ -5,11 +5,11 @@ import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
-  // set initial form state
+  // empty string form state at start
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
-  // set state for form validation
+  // false state for form validation at start
   const [validated] = useState(false);
-  // set state for alert
+  // false state for alert at start
   const [showAlert, setShowAlert] = useState(false);
 
   const handleInputChange = (event) => {
@@ -20,7 +20,7 @@ const SignupForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
+    //make sure form is filled out properly when submitted
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -31,7 +31,7 @@ const SignupForm = () => {
       const response = await createUser(userFormData);
 
       if (!response.ok) {
-        throw new Error('something went wrong!');
+        throw new Error('HTTP Response was not OK');
       }
 
       const { token, user } = await response.json();
@@ -42,11 +42,7 @@ const SignupForm = () => {
       setShowAlert(true);
     }
 
-    setUserFormData({
-      username: '',
-      email: '',
-      password: '',
-    });
+    setUserFormData({ username: '', email: '', password: '' });
   };
 
   return (
