@@ -1,4 +1,4 @@
-// route to get logged in user's info (needs the token)
+// Retrieve active (logged in) user's info, which requires token
 export const getMe = (token) => {
   return fetch('/api/users/me', {
     headers: {
@@ -8,6 +8,7 @@ export const getMe = (token) => {
   });
 };
 
+//Create a new user during registration
 export const createUser = (userData) => {
   return fetch('/api/users', {
     method: 'POST',
@@ -18,6 +19,7 @@ export const createUser = (userData) => {
   });
 };
 
+//Log in existing user to save a searched book or view previously saved books
 export const loginUser = (userData) => {
   return fetch('/api/users/login', {
     method: 'POST',
@@ -50,8 +52,8 @@ export const deleteBook = (bookId, token) => {
   });
 };
 
-// make a search to google books api
-// https://www.googleapis.com/books/v1/volumes?q=harry+potter
+// Use Google Books API to search for books including the query
+// For example: https://www.googleapis.com/books/v1/volumes?q=sapiens
 export const searchGoogleBooks = (query) => {
   return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
 };
