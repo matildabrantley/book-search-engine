@@ -8,7 +8,7 @@
 * [License](#license)
 * [Questions](#questions)
 ## Description
-M.E.R.N. stack search engine for books using Google Books API and GraphQL (with Apollo Server).
+M.E.R.N. stack search engine for books using Google Books API.
 ## Features
 * Search for any book with Google Books API and receive detailed descriptions with front cover of books matching results.
 * Live app hosted on Heroku with MongoDB Atlas database.

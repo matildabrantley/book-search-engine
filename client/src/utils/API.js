@@ -1,6 +1,6 @@
 // Retrieve active (logged in) user's info, which requires token
 export const getMe = (token) => {
-  return fetch('/api/users/me', {
+  return fetch('/api/users/getUser', {
     headers: {
       'Content-Type': 'application/json',
       authorization: `Bearer ${token}`,
